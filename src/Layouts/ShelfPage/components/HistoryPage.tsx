@@ -21,7 +21,7 @@ export const HistoryPage = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/histories/search/findBooksByUserEmail/?userEmail=${
+        const url = `${import.meta.env.VITE_API_BASE_URL}/histories/search/findBooksByUserEmail/?userEmail=${
           authState.accessToken?.claims.sub
         }&page=${currentPage - 1}&size=5`;
         const requestOptions = {
@@ -39,7 +39,6 @@ export const HistoryPage = () => {
 
         setHistories(historyResponseJson._embedded.histories);
         setTotalPage(historyResponseJson.page.totalPages);
-        console.log(historyResponseJson._embedded.histories);
       }
       setIsLoadingHistory(false);
     };

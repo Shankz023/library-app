@@ -27,7 +27,6 @@ export const ManageLibraryPage = () => {
   }
 
   if(authState?.accessToken?.claims.userType !== "admin"){
-    console.log(authState?.accessToken?.claims.userType);
     return <Redirect to='/home'/>
   }
 
