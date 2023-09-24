@@ -16,7 +16,7 @@ export const ChangeQuantityOfBooks = () => {
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const url: string = `http://localhost:8080/api/books?page=${
+      const url: string = `${import.meta.env.VITE_API_BASE_URL}/books?page=${
         currentPage - 1
       }&size=${booksPerPage}`;
 

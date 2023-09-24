@@ -30,7 +30,7 @@ export const AdminMessages = () => {
   useEffect(() => {
     const fetchUserMessages = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/messages/search/findByClosed/?closed=false&page=${
+        const url = `${import.meta.env.VITE_API_BASE_URL}/messages/search/findByClosed/?closed=false&page=${
           currentPage - 1
         }&size=${messagePerPage}`;
         const requestOptions = {
@@ -79,7 +79,7 @@ export const AdminMessages = () => {
   }
 
   async function submitResponseToQuestion(id: number, response: string) {
-    const url = `http://localhost:8080/api/messages/secure/admin/message`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/messages/secure/admin/message`;
     if (
       authState &&
       authState?.isAuthenticated &&

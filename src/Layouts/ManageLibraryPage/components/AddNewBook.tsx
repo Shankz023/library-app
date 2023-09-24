@@ -35,12 +35,21 @@ export const AddNewBook = () => {
       setSelectedImage(reader.result);
     };
     reader.onerror = function (error) {
-      console.log("Error", error);
+      toast.error(`${error}`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     };
   }
 
   async function submitNewBook() {
-    const url = `http://localhost:8080/api/admin/secure/add/book`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/admin/secure/add/book`;
     if (
       authState?.isAuthenticated &&
       title !== "" &&
@@ -89,10 +98,9 @@ export const AddNewBook = () => {
         progress: undefined,
         theme: "light",
       });
-    }
-    else{
-        setDispalyWarning(true);
-        setDisplaySuccess(false);
+    } else {
+      setDispalyWarning(true);
+      setDisplaySuccess(false);
     }
   }
 
@@ -213,8 +221,12 @@ export const AddNewBook = () => {
                   onChange={(e) => base64ConversionOfImage(e)}
                 />
                 <div>
-                  <button type="button" className="btn btn-primary mt-3" onClick={submitNewBook}>
-                    Add Book 
+                  <button
+                    type="button"
+                    className="btn btn-primary mt-3"
+                    onClick={submitNewBook}
+                  >
+                    Add Book
                   </button>
                 </div>
               </div>

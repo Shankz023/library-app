@@ -10,7 +10,16 @@ const LoginWidget = ({config})=>{
     }
 
     const onError = (err)=>{
-        console.log('Sign in error', err);
+        toast.error(`'Sign in error '${err}`, {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
     }
 
     if(!authState){

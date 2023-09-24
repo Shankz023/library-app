@@ -7,6 +7,7 @@ import ReviewModel from "../../models/ReviewModel";
 import { LatestReviews } from "./LatestReviews";
 import { useOktaAuth } from "@okta/okta-react";
 import ReviewRequestModel from "../../models/ReviewRequestModel";
+import { toast } from "react-toastify";
 
 export const BookCheckoutPage = () => {
   const { authState } = useOktaAuth();
@@ -33,12 +34,14 @@ export const BookCheckoutPage = () => {
   const [isReviewLeft, setIsReviewLeft] = useState(false);
   const [isLoadingUserReview, setIsLoadingUserReview] = useState(true);
 
+  // Payment
+  const [displayError, setDisplayError] = useState(false);
 
   const bookId = window.location.pathname.split("/")[2];
 
   useEffect(() => {
     const fetchBooks = async () => {
-      const baseUrl: string = `http://localhost:8080/api/books/${bookId}`;
+      const baseUrl: string = `${import.meta.env.VITE_API_BASE_URL}/books/${bookId}`;
 
       const response = await fetch(baseUrl);
 
@@ -70,7 +73,7 @@ export const BookCheckoutPage = () => {
 
   useEffect(() => {
     const fetchBookReviews = async () => {
-      const reviewUrl: string = `http://localhost:8080/api/reviews/search/findByBookId?bookId=${bookId}`;
+      const reviewUrl: string = `${import.meta.env.VITE_API_BASE_URL}/reviews/search/findByBookId?bookId=${bookId}`;
 
       const response = await fetch(reviewUrl);
       if (!response.ok) {
@@ -115,7 +118,7 @@ export const BookCheckoutPage = () => {
   useEffect(() => {
     const fetchUserReviewBooks = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/reviews/secure/user/book/?bookId=${bookId}`;
+        const url = `${import.meta.env.VITE_API_BASE_URL}/reviews/secure/user/book/?bookId=${bookId}`;
         const requestOptions = {
           method: "GET",
           headers: {
@@ -142,7 +145,7 @@ export const BookCheckoutPage = () => {
   useEffect(() => {
     const fetchUserCurrentLoansCount = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/books/secure/currentloans/count`;
+        const url = `${import.meta.env.VITE_API_BASE_URL}/books/secure/currentloans/count`;
         const requestOptions = {
           method: "GET",
           headers: {
@@ -170,7 +173,7 @@ export const BookCheckoutPage = () => {
   useEffect(() => {
     const fetchUserCurrentLoansCount = async () => {
       if (authState && authState.isAuthenticated) {
-        const url = `http://localhost:8080/api/books/secure/ischeckedout/byuser?bookId=${bookId}`;
+        const url = `${import.meta.env.VITE_API_BASE_URL}/books/secure/ischeckedout/byuser?bookId=${bookId}`;
         const requestOptions = {
           method: "GET",
           headers: {
@@ -213,7 +216,7 @@ export const BookCheckoutPage = () => {
   }
 
   async function checkoutBooks() {
-    const url = `http://localhost:8080/api/books/secure/checkout?bookId=${book?.id}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/books/secure/checkout?bookId=${book?.id}`;
     const requestOptions = {
       method: "PUT",
       headers: {
@@ -223,6 +226,17 @@ export const BookCheckoutPage = () => {
     };
     const checkoutBooksResponse = await fetch(url, requestOptions);
     if (!checkoutBooksResponse.ok) {
+      setDisplayError(true);
+      toast.error("Please pay outstanding fees and/or return the late book(s)", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
       throw new Error("Something went wrong!");
     }
     setIsCheckedOut(true);
@@ -235,7 +249,7 @@ export const BookCheckoutPage = () => {
     }
 
     const reviewRequestModel = new ReviewRequestModel(starInput, bookId,reviewDescription);
-    const url = `http://localhost:8080/api/reviews/secure`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/reviews/secure`;
     const requestOptions = {
       method: "POST",
       headers: {

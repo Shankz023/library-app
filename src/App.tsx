@@ -17,6 +17,7 @@ import { MessagesPage } from "./Layouts/MessagesPage/MessagesPage";
 import { ManageLibraryPage } from "./Layouts/ManageLibraryPage/ManageLibraryPage";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
+import { PaymentPage } from "./Layouts/PaymentPage/PaymentPage";
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -81,6 +82,9 @@ export const App = () => {
             </SecureRoute>
             <SecureRoute path="/admin">
               <ManageLibraryPage />
+            </SecureRoute>
+            <SecureRoute path="/fees">
+              <PaymentPage/>
             </SecureRoute>
           </Switch>
         </div>

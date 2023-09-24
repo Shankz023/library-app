@@ -19,8 +19,8 @@ export const Loans = () => {
   useEffect(() => {
     const fetchUserCurrentLoans = async () => {
       if (authState && authState.isAuthenticated) {
-        const baseUrl: string =
-          "http://localhost:8080/api/books/secure/currentloans";
+        const baseUrl =
+          `${import.meta.env.VITE_API_BASE_URL}/books/secure/currentloans`;
         const requestOptions = {
           method: "GET",
           headers: {
@@ -30,13 +30,13 @@ export const Loans = () => {
         };
 
         const shelfCurrentLoansResponse = await fetch(baseUrl, requestOptions);
+        
         if (!shelfCurrentLoansResponse.ok) {
           throw new Error("Something went wrong");
         }
         const shelfCurrentLoansResponseJson =
           await shelfCurrentLoansResponse.json();
         setShelfCurrentLoans(shelfCurrentLoansResponseJson);
-        console.log(shelfCurrentLoans);
       }
       setIsLoadingUserLoans(false);
     };
@@ -60,7 +60,7 @@ export const Loans = () => {
   }
 
   async function returnBook(bookId: number) {
-    const url = `http://localhost:8080/api/books/secure/return/?bookId=${bookId}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/books/secure/return/?bookId=${bookId}`;
     const requestionOptions = {
       method: "PUT",
       headers: {
@@ -76,7 +76,7 @@ export const Loans = () => {
   }
 
   async function renewBook(bookId: number){
-    const url = `http://localhost:8080/api/books/secure/renew/loan/?bookId=${bookId}`;
+    const url = `${import.meta.env.VITE_API_BASE_URL}/books/secure/renew/loan/?bookId=${bookId}`;
     const requestionOptions = {
       method: "PUT",
       headers: {
